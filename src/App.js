@@ -7,25 +7,28 @@ export default function App() {
   const [pointsP2, setPointsP2] = useState(0);
   const [pointsTop, setPointsTop] = useState(0);
   const [currentPlayer, setCurrentPlayer] = useState("P1");
+  const [isGameOver, setIsGameOver] = useState(false);
   const [timer, setTimer] = useState(10); // ⏱️ 10s por jogada
+  
 
   // 🕒 Efeito: inicia contagem decrescente a cada jogada
   useEffect(() => {
-    setTimer(10); // reinicia sempre que troca de jogador
-
+    if (isGameOver) return; // para o tempo se o jogo acabou
+  
+    setTimer(10);
+  
     const interval = setInterval(() => {
       setTimer(prev => {
         if (prev === 1) {
-          // tempo acabou, muda jogador
           setCurrentPlayer(cp => (cp === "P1" ? "P2" : "P1"));
           return 10;
         }
         return prev - 1;
       });
     }, 1000);
-
+  
     return () => clearInterval(interval);
-  }, [currentPlayer]);
+  }, [currentPlayer, isGameOver]); 
 
   return (
     <div id="container" className="game-layout">
@@ -44,15 +47,17 @@ export default function App() {
           timer={timer} // passa tempo
         />
         <GamePanel
-          currentPlayer={currentPlayer}
-          setCurrentPlayer={setCurrentPlayer}
-          pointsP1={pointsP1}
-          pointsP2={pointsP2}
-          setPointsP1={setPointsP1}
-          setPointsP2={setPointsP2}
-          pointsTop={pointsTop}
-          setPointsTop={setPointsTop}
-        />
+  currentPlayer={currentPlayer}
+  setCurrentPlayer={setCurrentPlayer}
+  pointsP1={pointsP1}
+  pointsP2={pointsP2}
+  setPointsP1={setPointsP1}
+  setPointsP2={setPointsP2}
+  pointsTop={pointsTop}
+  setPointsTop={setPointsTop}
+  isGameOver={isGameOver}
+  setIsGameOver={setIsGameOver}
+/>
         <Footer />
       </main>
 

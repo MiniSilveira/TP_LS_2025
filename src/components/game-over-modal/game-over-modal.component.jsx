@@ -1,9 +1,9 @@
-import React from "react";
-import { useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import "./game-over-modal.css";
 
-function GameOverModal({ isOpen, points = 0, onClose }) {
+function GameOverModal({ isOpen, points = 0, winner = "", onClose }) {
   const ref = useRef();
+
   useEffect(() => {
     if (isOpen) {
       ref.current?.showModal();
@@ -13,7 +13,7 @@ function GameOverModal({ isOpen, points = 0, onClose }) {
   }, [isOpen]);
 
   return (
-    <dialog id="modal-gameOver" ref={ref} onClose={onClose} onCancel={onClose}>
+    <dialog id="modal-gameOver" ref={ref} onClose={onClose}>
       <div className="estilos">
         <header>
           <span className="closeModal" onClick={onClose}>
@@ -22,19 +22,11 @@ function GameOverModal({ isOpen, points = 0, onClose }) {
           <div>Jogo Terminado</div>
         </header>
         <div className="info" id="messageGameOver">
+          <p>🎉 <strong>{winner}</strong> venceu o jogo!</p>
           <p>Pontuação: {points}</p>
         </div>
-        {/* <div className="info" id="nickname">
-          Nick Name:
-          <input
-            type="text"
-            id="inputNick"
-            size="16"
-            placeholder="Introduza seu Nick"
-          />
-          <button id="okTop">ok</button>
-        </div> */}
         <footer>
+          <button onClick={onClose}>Jogar Novamente</button>
           <p>
             <em>© Linguagens Script @ DEIS - ISEC</em>
           </p>

@@ -1,0 +1,41 @@
+#game {
+  width: 90%;
+  max-width: 700px;
+  aspect-ratio: 7 / 6;
+  margin: 0 auto;
+  padding: 20px 10px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 10px;
+  justify-content: center;
+  background-color: #004080; /* cor do tabuleiro */
+  border: 6px solid #003366;
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  position: relative;
+}
+
+/* "buracos" do tabuleiro: vazios e circulares */
+.celula {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background-color: #001f3f; /* cor escura do "buraco" */
+  box-shadow:
+    inset -3px -3px 6px rgba(0, 0, 0, 0.8),
+    inset 3px 3px 6px rgba(255, 255, 255, 0.1);
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+/* Peças dos jogadores */
+.celula.vermelho {
+  background-color: red;
+  box-shadow: none;
+}
+
+.celula.amarelo {
+  background-color: yellow;
+  box-shadow: none;
+}

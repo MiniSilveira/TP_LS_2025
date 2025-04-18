@@ -1,19 +1,15 @@
 #game {
-  width: 90%;
-  max-width: 700px;
-  aspect-ratio: 7 / 6;
-  margin: 0 auto;
-  padding: 20px 10px;
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(6, 1fr);
+  grid-template-columns: repeat(7, 60px);
+  grid-template-rows: repeat(6, 60px);
   gap: 10px;
-  justify-content: center;
-  background-color: #004080; /* cor do tabuleiro */
+  background-color: #004080;
   border: 6px solid #003366;
   border-radius: 20px;
+  padding: 20px;
   box-shadow: 0 0 15px rgba(0,0,0,0.5);
-  position: relative;
+  width: fit-content;
+  margin: auto;
 }
 
 /* "buracos" do tabuleiro: vazios e circulares */

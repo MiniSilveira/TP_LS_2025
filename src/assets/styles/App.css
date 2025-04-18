@@ -16,8 +16,6 @@
   background-color: #fff;
   color: grey;
   box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.3);
-  width: 500px;
-  min-width: 450px;
   border-radius: 10px;
 }
 main {

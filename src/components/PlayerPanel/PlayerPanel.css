@@ -1,0 +1,10 @@
+.player-panel {
+    transition: all 0.3s ease;
+  }
+  
+  .player-panel.active {
+    border: 3px solid var(--globalColor);
+    background-color: #e2e8f0; /* cinzento claro/azulado */
+    box-shadow: 0 0 10px var(--globalColor);
+    transform: scale(1.05);
+  }

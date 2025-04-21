@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import "./game-panel.css";
-import GameOverModal from "../game-over-modal/game-over-modal.component";
 
 export default function GamePanel({
+  board,
+  setBoard,
   currentPlayer,
   setCurrentPlayer,
   pointsP1,
@@ -11,17 +12,13 @@ export default function GamePanel({
   setPointsP2,
   pointsTop,
   setPointsTop,
-  isGameOver,        // ✅ props
-  setIsGameOver      // ✅ props
+  setIsGameOver,
+  setWinner,
+  isVsCPU,
+  isGameOver
 }) {
-  const COLS = 7;
-  const ROWS = 6;
-
-  const [board, setBoard] = useState(
-    Array(COLS).fill(null).map(() => Array(ROWS).fill(null))
-  );
-
-  const [winner, setWinner] = useState(null);
+  const COLS = board.length;
+  const ROWS = board[0].length;
 
   const checkWin = (board, col, row, player) => {
     const directions = [
@@ -52,7 +49,7 @@ export default function GamePanel({
   };
 
   const handleColumnClick = (col) => {
-    if (isGameOver) return; // Bloqueia jogadas
+    if (isGameOver) return;
 
     const colData = board[col];
     const emptyRow = colData.findIndex(cell => cell === null);
@@ -66,6 +63,14 @@ export default function GamePanel({
 
     if (checkWin(newBoard, col, emptyRow, currentPlayer)) {
       setWinner(currentPlayer);
+      setIsGameOver(true);
+      return;
+    }
+    
+    const isFull = newBoard.every(col => col.every(cell => cell !== null));
+    
+    if (isFull) {
+      setWinner(null);
       setIsGameOver(true);
       return;
     }
@@ -105,13 +110,25 @@ export default function GamePanel({
     return cells;
   };
 
-  const resetGame = () => {
-    setBoard(Array(COLS).fill(null).map(() => Array(ROWS).fill(null)));
-    setIsGameOver(false);
-    setWinner(null);
-    setPointsP1(0);
-    setPointsP2(0);
-    setCurrentPlayer("P1");
+  useEffect(() => {
+    if (isVsCPU && currentPlayer === "P2" && !isGameOver) {
+      const timeout = setTimeout(() => {
+        makeRandomCPUPlay();
+      }, 1000); // atraso visual de 1s
+
+      return () => clearTimeout(timeout);
+    }
+  }, [currentPlayer, isVsCPU, isGameOver]);
+
+  const makeRandomCPUPlay = () => {
+    const availableCols = board
+      .map((col, i) => (col.includes(null) ? i : null))
+      .filter((i) => i !== null);
+
+    if (availableCols.length === 0) return;
+
+    const randomCol = availableCols[Math.floor(Math.random() * availableCols.length)];
+    handleColumnClick(randomCol);
   };
 
   return (
@@ -120,11 +137,6 @@ export default function GamePanel({
       <div id="game">
         {renderCells()}
       </div>
-      <GameOverModal
-        isOpen={isGameOver}
-        points={winner === "P1" ? pointsP1 : pointsP2}
-        onClose={resetGame}
-      />
     </section>
   );
 }

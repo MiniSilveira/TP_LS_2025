@@ -1,23 +1,10 @@
 import React from "react";
 import './control-panel.css';
 
-export default function ControlPanel({ points, pointsTop, timer }) {
+export default function ControlPanel({ points, pointsTop, timer, currentPlayerName, setIsVsCPU }) {
   return (
     <section id="panel-control">
       <h3 className="sr-only">Escolha o Jogo</h3>
-      <form className="form">
-        <fieldset className="form-group">
-          <label htmlFor="btLevel">Jogo:</label>
-          <select id="btLevel">
-            <option value="0">Seleccione...</option>
-            <option value="1">Remoto 1x1</option>
-            <option value="2">Contra o Computador</option>
-          </select>
-        </fieldset>
-        <button type="button" id="btPlay" onClick={() => console.log("Iniciar jogo")}>
-          Iniciar Jogo
-        </button>
-      </form>
 
       <div className="form-metadata">
         <p id="message" role="alert" className="hide">

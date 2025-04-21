@@ -22,11 +22,15 @@ function GameOverModal({ isOpen, points = 0, winner = "", onClose }) {
           <div>Jogo Terminado</div>
         </header>
         <div className="info" id="messageGameOver">
-          <p>🎉 <strong>{winner}</strong> venceu o jogo!</p>
-          <p>Pontuação: {points}</p>
+        <h2>
+        {winner === null ? "⚠️ Empate!" : `🎉 ${winner} venceu!`}
+        </h2>
+        {winner !== null && (
+  <p>Pontuação: {points}</p>
+)}
         </div>
         <footer>
-          <button onClick={onClose}>Jogar Novamente</button>
+          <button onClick={onClose} className="JogarNov">Jogar Novamente</button>
           <p>
             <em>© Linguagens Script @ DEIS - ISEC</em>
           </p>

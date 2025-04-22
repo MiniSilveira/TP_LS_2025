@@ -3,9 +3,9 @@ import { Header, Footer, ControlPanel, GamePanel } from "./components";
 import PlayerPanel from "./components/PlayerPanel/PlayerPanel";
 import PlayerSetupModal from "./components/PlayerSetupModal/PlayerSetupModal";
 import GameOverModal from "./components/game-over-modal/game-over-modal.component";
+import Top10Modal from "./components/Top10Modal/Top10Modal";
 import { useState, useEffect } from "react";
 import proxPeca from "./components/proxPeca/proxPeca";
-
 
 export default function App() {
   const COLS = 7;
@@ -46,6 +46,8 @@ export default function App() {
   const [isGameOver, setIsGameOver] = useState(false);
   const [winner, setWinner] = useState(null);
 
+  const [showTop10, setShowTop10] = useState(false);
+
   useEffect(() => {
     if (!isGameStarted || isGameOver) return;
 
@@ -64,12 +66,28 @@ export default function App() {
     return () => clearInterval(interval);
   }, [currentPlayer, isGameStarted, isGameOver]);
 
+  // Guardar pontuação no TOP 10
+  useEffect(() => {
+    if (isGameOver && winner) {
+      const playerName = winner === "P1" ? player1Name : player2Name;
+      const score = winner === "P1" ? pointsP1 : pointsP2;
+
+      const top = JSON.parse(localStorage.getItem("top10") || "[]");
+
+      top.push({ name: playerName, score });
+      top.sort((a, b) => b.score - a.score);
+
+      const top10 = top.slice(0, 10);
+      localStorage.setItem("top10", JSON.stringify(top10));
+    }
+  }, [isGameOver]);
+
   const handleStartGame = ({ P1, P2, currentPlayer, isVsCPU }) => {
     setPlayer1Name(P1);
     setPlayer2Name(P2);
     setCurrentPlayer(currentPlayer);
     setIsVsCPU(isVsCPU);
-    setSpecialCells(generateSpecialCells()); // <--- NOVO
+    setSpecialCells(generateSpecialCells());
     setShowSetupModal(false);
     setIsGameStarted(true);
   };
@@ -83,7 +101,7 @@ export default function App() {
     setIsGameOver(false);
     setWinner(null);
     setIsGameStarted(true);
-    setSpecialCells(generateSpecialCells()); // <--- NOVO
+    setSpecialCells(generateSpecialCells());
   };
 
   return (
@@ -107,6 +125,7 @@ export default function App() {
           timer={timer}
           currentPlayerName={currentPlayer === "P1" ? player1Name : player2Name}
           setIsVsCPU={setIsVsCPU}
+          setShowTop10={setShowTop10}
         />
         <proxPeca currentPlayer={currentPlayer} />
 
@@ -125,7 +144,7 @@ export default function App() {
           setWinner={setWinner}
           isVsCPU={isVsCPU}
           isGameOver={isGameOver}
-          specialCells={specialCells} // <--- NOVO
+          specialCells={specialCells}
         />
 
         <GameOverModal
@@ -134,6 +153,8 @@ export default function App() {
           winner={winner}
           onClose={resetGame}
         />
+
+        <Top10Modal isOpen={showTop10} onClose={() => setShowTop10(false)} />
 
         <Footer />
       </main>

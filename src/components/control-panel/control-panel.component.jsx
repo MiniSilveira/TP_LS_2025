@@ -1,7 +1,7 @@
 import React from "react";
 import './control-panel.css';
 
-export default function ControlPanel({ points, pointsTop, timer, currentPlayerName, setIsVsCPU }) {
+export default function ControlPanel({ points, pointsTop, timer, currentPlayerName, setIsVsCPU,setShowTop10 }) {
   return (
     <section id="panel-control">
       <h3 className="sr-only">Escolha o Jogo</h3>
@@ -23,7 +23,7 @@ export default function ControlPanel({ points, pointsTop, timer, currentPlayerNa
           <dd id="points">{points}</dd>
         </dl>
         <div id="top10" className="right">
-          <button id="btTop">Ver TOP 10</button>
+        <button id="btTop" onClick={() => setShowTop10(true)}>Ver TOP 10</button>
         </div>
       </div>
     </section>

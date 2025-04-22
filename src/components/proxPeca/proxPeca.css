@@ -1,0 +1,17 @@
+.zonaproxPeca {
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+ 
+  
+  .vermelho {
+    background-color: red;
+  }
+  
+  .amarelo {
+    background-color: yellow;
+  }

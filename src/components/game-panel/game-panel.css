@@ -9,7 +9,7 @@
   padding: 20px;
   box-shadow: 0 0 15px rgba(0,0,0,0.5);
   width: fit-content;
-  margin: auto;
+  margin: 0 auto;
 }
 
 /* "buracos" do tabuleiro: vazios e circulares */
@@ -34,4 +34,73 @@
 .celula.amarelo {
   background-color: yellow;
   box-shadow: none;
+}
+
+@keyframes cair {
+  0% {
+    transform: translateY(-380px);
+    opacity: 0.3;
+  }
+  60% {
+    transform: translateY(10%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.celula.animar {
+  animation: cair 0.35s ease-out;
+}
+
+.game-wrapper {
+  position: relative;
+  width: fit-content;
+  margin: 0 auto;
+  margin-top: 100px; /* espaçamento extra entre score e tabuleiro */
+}
+
+.hover-preview {
+  position: absolute;
+  top: -80px;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  pointer-events: none;
+}
+
+.preview-piece {
+  position: absolute;
+  top: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  transition: left 0.1s ease;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.preview-piece.vermelho {
+  background-color: red;
+}
+
+.preview-piece.amarelo {
+  background-color: yellow;
+}
+
+@keyframes brilho-especial {
+  0% {
+    box-shadow: 0 0 0 2px gold inset;
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.8) inset;
+  }
+  100% {
+    box-shadow: 0 0 0 2px gold inset;
+  }
+}
+
+.celula.especial {
+  animation: brilho-especial 1.2s infinite;
+  border-radius: 50%;
 }

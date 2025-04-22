@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./game-panel.css";
 
 export default function GamePanel({
@@ -19,6 +19,10 @@ export default function GamePanel({
 }) {
   const COLS = board.length;
   const ROWS = board[0].length;
+  const CELL_SIZE = 60;
+
+  const [hoveredCol, setHoveredCol] = useState(null);
+  const [lastMove, setLastMove] = useState(null);
 
   const checkWin = (board, col, row, player) => {
     const directions = [
@@ -60,15 +64,15 @@ export default function GamePanel({
     );
     newBoard[col][emptyRow] = currentPlayer;
     setBoard(newBoard);
+    setLastMove({ col, row: emptyRow });
 
     if (checkWin(newBoard, col, emptyRow, currentPlayer)) {
       setWinner(currentPlayer);
       setIsGameOver(true);
       return;
     }
-    
+
     const isFull = newBoard.every(col => col.every(cell => cell !== null));
-    
     if (isFull) {
       setWinner(null);
       setIsGameOver(true);
@@ -95,14 +99,30 @@ export default function GamePanel({
       for (let col = 0; col < COLS; col++) {
         const value = board[col][row];
         let className = "celula";
-        if (value === "P1") className += " vermelho";
-        if (value === "P2") className += " amarelo";
+
+        const isLast = lastMove?.col === col && lastMove?.row === row;
+        const style = isLast
+          ? { "--altura": `${(ROWS - 1 - row) * 70}px` }
+          : {};
+
+        if (value === "P1") {
+          className += " vermelho";
+          if (isLast) className += " animar";
+        }
+
+        if (value === "P2") {
+          className += " amarelo";
+          if (isLast) className += " animar";
+        }
 
         cells.push(
           <div
             key={`${col}-${row}`}
             className={className}
+            style={style}
             onClick={() => handleColumnClick(col)}
+            onMouseEnter={() => setHoveredCol(col)}
+            onMouseLeave={() => setHoveredCol(null)}
           />
         );
       }
@@ -114,8 +134,7 @@ export default function GamePanel({
     if (isVsCPU && currentPlayer === "P2" && !isGameOver) {
       const timeout = setTimeout(() => {
         makeRandomCPUPlay();
-      }, 1000); // atraso visual de 1s
-
+      }, 1000);
       return () => clearTimeout(timeout);
     }
   }, [currentPlayer, isVsCPU, isGameOver]);
@@ -134,8 +153,20 @@ export default function GamePanel({
   return (
     <section id="panel-game">
       <h3 className="sr-only">Tabuleiro do 4 em linha</h3>
-      <div id="game">
-        {renderCells()}
+
+      <div className="game-wrapper">
+        <div className="hover-preview">
+          {hoveredCol !== null && (
+            <div
+              className={`preview-piece ${currentPlayer === "P1" ? "vermelho" : "amarelo"}`}
+              style={{ left: `${hoveredCol * 70 + 25}px` }}
+            />
+          )}
+        </div>
+
+        <div id="game">
+          {renderCells()}
+        </div>
       </div>
     </section>
   );

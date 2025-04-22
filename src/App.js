@@ -4,6 +4,8 @@ import PlayerPanel from "./components/PlayerPanel/PlayerPanel";
 import PlayerSetupModal from "./components/PlayerSetupModal/PlayerSetupModal";
 import GameOverModal from "./components/game-over-modal/game-over-modal.component";
 import { useState, useEffect } from "react";
+import proxPeca from "./components/proxPeca/proxPeca";
+
 
 export default function App() {
   const COLS = 7;
@@ -92,7 +94,7 @@ export default function App() {
           currentPlayerName={currentPlayer === "P1" ? player1Name : player2Name}
           setIsVsCPU={setIsVsCPU}
         />
-
+        <proxPeca currentPlayer={currentPlayer} />
         <GamePanel
           board={board}
           setBoard={setBoard}
@@ -108,6 +110,7 @@ export default function App() {
           setWinner={setWinner}
           isVsCPU={isVsCPU}
           isGameOver={isGameOver}
+          
         />
 
 <GameOverModal

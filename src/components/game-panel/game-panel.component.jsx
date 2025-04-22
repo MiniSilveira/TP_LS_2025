@@ -15,11 +15,11 @@ export default function GamePanel({
   setIsGameOver,
   setWinner,
   isVsCPU,
-  isGameOver
+  isGameOver,
+  specialCells // <- novo prop
 }) {
   const COLS = board.length;
   const ROWS = board[0].length;
-  const CELL_SIZE = 60;
 
   const [hoveredCol, setHoveredCol] = useState(null);
   const [lastMove, setLastMove] = useState(null);
@@ -66,6 +66,8 @@ export default function GamePanel({
     setBoard(newBoard);
     setLastMove({ col, row: emptyRow });
 
+    const isSpecialCell = specialCells.some(([c, r]) => c === col && r === emptyRow);
+
     if (checkWin(newBoard, col, emptyRow, currentPlayer)) {
       setWinner(currentPlayer);
       setIsGameOver(true);
@@ -84,12 +86,12 @@ export default function GamePanel({
       const newPoints = pointsP1 + pointsToAdd;
       setPointsP1(newPoints);
       if (newPoints > pointsTop) setPointsTop(newPoints);
-      setCurrentPlayer("P2");
+      if (!isSpecialCell) setCurrentPlayer("P2");
     } else {
       const newPoints = pointsP2 + pointsToAdd;
       setPointsP2(newPoints);
       if (newPoints > pointsTop) setPointsTop(newPoints);
-      setCurrentPlayer("P1");
+      if (!isSpecialCell) setCurrentPlayer("P1");
     }
   };
 
@@ -114,6 +116,9 @@ export default function GamePanel({
           className += " amarelo";
           if (isLast) className += " animar";
         }
+
+        const isSpecial = specialCells.some(([c, r]) => c === col && r === row);
+        if (isSpecial) className += " especial";
 
         cells.push(
           <div

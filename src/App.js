@@ -16,7 +16,19 @@ export default function App() {
       .fill(null)
       .map(() => Array(ROWS).fill(null));
 
+  const generateSpecialCells = () => {
+    const positions = new Set();
+    while (positions.size < 5) {
+      const col = Math.floor(Math.random() * COLS);
+      const row = Math.floor(Math.random() * ROWS);
+      positions.add(`${col},${row}`);
+    }
+    return [...positions].map(p => p.split(',').map(Number));
+  };
+
   const [board, setBoard] = useState(createEmptyBoard());
+  const [specialCells, setSpecialCells] = useState([]);
+
   const [isVsCPU, setIsVsCPU] = useState(false);
   const [player1Name, setPlayer1Name] = useState("");
   const [player2Name, setPlayer2Name] = useState("");
@@ -34,7 +46,6 @@ export default function App() {
   const [isGameOver, setIsGameOver] = useState(false);
   const [winner, setWinner] = useState(null);
 
-  // Timer apenas após o jogo começar
   useEffect(() => {
     if (!isGameStarted || isGameOver) return;
 
@@ -57,19 +68,22 @@ export default function App() {
     setPlayer1Name(P1);
     setPlayer2Name(P2);
     setCurrentPlayer(currentPlayer);
-    setIsVsCPU(isVsCPU); 
+    setIsVsCPU(isVsCPU);
+    setSpecialCells(generateSpecialCells()); // <--- NOVO
     setShowSetupModal(false);
     setIsGameStarted(true);
   };
+
   const resetGame = () => {
     setPointsP1(0);
     setPointsP2(0);
     setBoard(createEmptyBoard());
-    setCurrentPlayer("temp"); // força trigger no useEffect
+    setCurrentPlayer("temp");
     setTimeout(() => setCurrentPlayer("P1"), 0);
     setIsGameOver(false);
     setWinner(null);
-    setIsGameStarted(true); // reinicia o jogo após fim
+    setIsGameStarted(true);
+    setSpecialCells(generateSpecialCells()); // <--- NOVO
   };
 
   return (
@@ -95,6 +109,7 @@ export default function App() {
           setIsVsCPU={setIsVsCPU}
         />
         <proxPeca currentPlayer={currentPlayer} />
+
         <GamePanel
           board={board}
           setBoard={setBoard}
@@ -110,15 +125,15 @@ export default function App() {
           setWinner={setWinner}
           isVsCPU={isVsCPU}
           isGameOver={isGameOver}
-          
+          specialCells={specialCells} // <--- NOVO
         />
 
-<GameOverModal
-  isOpen={isGameOver}
-  points={winner === "P1" ? pointsP1 : winner === "P2" ? pointsP2 : null}
-  winner={winner}
-  onClose={resetGame}
-/>
+        <GameOverModal
+          isOpen={isGameOver}
+          points={winner === "P1" ? pointsP1 : winner === "P2" ? pointsP2 : null}
+          winner={winner}
+          onClose={resetGame}
+        />
 
         <Footer />
       </main>
@@ -128,7 +143,6 @@ export default function App() {
           name={player2Name}
           points={pointsP2}
           isActive={currentPlayer === "P2"}
-          
         />
       </div>
     </div>

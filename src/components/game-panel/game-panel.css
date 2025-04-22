@@ -104,3 +104,8 @@
   animation: brilho-especial 1.2s infinite;
   border-radius: 50%;
 }
+
+.celula.hover-col {
+  background-color: rgba(0, 123, 255, 0.2); /* azul claro com transparência */
+  transition: background-color 0.3s ease;
+}
